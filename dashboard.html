@@ -122,11 +122,11 @@
     }
     .gauge-value {
       position: absolute;
-      top: 28px;
+      top: 40px;
       left: 0;
       width: 100%;
       text-align: center;
-      font-size: 36px;  /* Changed from 48px to 36px */
+      font-size: 36px;  
       font-weight: 700;
       color: #00529B;
     }
@@ -424,7 +424,7 @@
       <div class="login-logo">
         <svg viewBox="0 0 120 48" width="120" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="120" height="48" rx="12" fill="#00529B"/>
-          <text x="60" y="30" text-anchor="middle" font-size="24" font-family="Inter, Arial, sans-serif" fill="#fff" font-weight="bold">Freddie Mac</text>
+          <text x="60" y="30" text-anchor="middle" font-size="19" font-family="Inter, Arial, sans-serif" fill="#fff" font-weight="bold">Freddie Mac</text>
         </svg>
       </div>
       <div class="login-title">Sign In</div>
@@ -453,7 +453,7 @@
   </div>
   <div class="container">
     <div class="title-row">
-      <div class="page-title">Risk Assessment</div>
+      <div class="page-title">Underwriting Risk Assessment Tool</div>
       <div class="loan-selector">
         <span class="loan-label">Loan ID</span>
         <input class="loan-input" id="loan-input" placeholder="123456789" />
@@ -471,7 +471,7 @@
               <path d="M16,80 A64,64 0 0,1 144,80" fill="none" stroke="#00529B" stroke-width="16" />
               <path d="M144,80 A64,64 0 0,0 16,80" fill="none" stroke="#e0e6ed" stroke-width="16" />
             </svg>
-            <div class="gauge-value">60%</div>
+            <div class="gauge-value">63%</div>
           </div>
           <div class="gauge-badge">High</div>
           <div class="mini-cards">
@@ -521,13 +521,13 @@
         </div>
         <!-- Next Steps Panel -->
         <div class="card" style="flex: 0.6;" id="next-steps-panel">
-          <div class="next-title">Next Steps</div>
+          <div class="next-title">Points to Consider</div>
           <ul class="next-list">
-            <li>Verify income documentation</li>
-            <li>Request additional assets information</li>
-            <li>Reprice loan</li>
+            <li>This originator has had 4 loans in the past year with a similar risk score default</li>
+            <li>Consider requesting documentation of reserves.</li>
+            <li>View loan data to assess risk in depth</li>
           </ul>
-          <div class="audit-link">View full audit trail</div>
+          <div class="audit-link">View Loan Data</div>
         </div>
         <!-- Feedback Panel -->
         <div class="card" style="flex: 0.4;" id="feedback-panel">
