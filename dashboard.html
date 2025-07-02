@@ -126,7 +126,7 @@
       left: 0;
       width: 100%;
       text-align: center;
-      font-size: 48px;
+      font-size: 36px;  /* Changed from 48px to 36px */
       font-weight: 700;
       color: #00529B;
     }
@@ -332,12 +332,116 @@
   </style>
 </head>
 <body>
+  <style>
+    .login-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: #f4f6f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .login-box {
+      background: white;
+      width: 400px;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0px 4px 16px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .login-logo {
+      margin-bottom: 0.5rem;
+    }
+    .login-title {
+      color: #002f6c;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .login-subtitle {
+      color: #666;
+      font-size: 14px;
+      text-align: center;
+      margin-top: -1rem;
+    }
+    .login-input-group {
+      width: 100%;
+    }
+    .login-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-size: 14px;
+    }
+    .login-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+    }
+    .login-options {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 12px 0;
+      background: #0070c9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-btn:hover {
+      background: #005ba3;
+    }
+    .login-btn:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+  </style>
+
   <div class="login-screen" id="login-screen">
     <form class="login-box" id="login-form" autocomplete="off" onsubmit="return false;">
-      <div class="login-title">Freddie Mac Login</div>
-      <input class="login-input" id="user-id" placeholder="User ID" autocomplete="off" />
-      <input class="login-input" id="user-pw" placeholder="Password" type="password" autocomplete="off" />
-      <button class="login-btn" id="login-btn">Login</button>
+      <div class="login-logo">
+        <svg viewBox="0 0 120 48" width="120" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="120" height="48" rx="12" fill="#00529B"/>
+          <text x="60" y="30" text-anchor="middle" font-size="24" font-family="Inter, Arial, sans-serif" fill="#fff" font-weight="bold">Freddie Mac</text>
+        </svg>
+      </div>
+      <div class="login-title">Sign In</div>
+      <div class="login-subtitle">Access your Freddie Mac Underwriting Tool</div>
+      <div class="login-input-group">
+        <label class="login-label" for="user-id">Email or Username</label>
+        <input class="login-input" id="user-id" placeholder="Enter your email" autocomplete="off" />
+      </div>
+      <div class="login-input-group">
+        <label class="login-label" for="user-pw">Password</label>
+        <input class="login-input" id="user-pw" type="password" placeholder="Enter your password" autocomplete="off" />
+      </div>
+      <div class="login-options">
+        <input type="checkbox" id="remember-me" />
+        <label for="remember-me">Remember me</label>
+      </div>
+      <button class="login-btn" id="login-btn">Sign In</button>
     </form>
   </div>
   <div class="header">
@@ -416,7 +520,7 @@
           </div>
         </div>
         <!-- Next Steps Panel -->
-        <div class="card">
+        <div class="card" style="flex: 0.6;" id="next-steps-panel">
           <div class="next-title">Next Steps</div>
           <ul class="next-list">
             <li>Verify income documentation</li>
@@ -424,6 +528,22 @@
             <li>Reprice loan</li>
           </ul>
           <div class="audit-link">View full audit trail</div>
+        </div>
+        <!-- Feedback Panel -->
+        <div class="card" style="flex: 0.4;" id="feedback-panel">
+          <div class="next-title">Loan Feedback</div>
+          <p style="color: #666; font-size: 14px; margin-bottom: 16px;">To aid our model and your future loans, did you accept this loan?</p>
+          <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="loan-accepted" value="yes">
+              <span style="font-size: 14px;">Yes</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="loan-accepted" value="no">
+              <span style="font-size: 14px;">No</span>
+            </label>
+          </div>
+          <button class="login-btn" style="margin-top: auto;" onclick="submitFeedback()">Submit Feedback</button>
         </div>
       </div>
     </div>
@@ -546,6 +666,14 @@
           drawLineChart(ctx, chartData);
         }
       }
+      function submitFeedback() {
+        var feedbackPanel = document.getElementById('feedback-panel');
+        var nextStepsPanel = document.getElementById('next-steps-panel');
+        
+        feedbackPanel.style.display = 'none';
+        nextStepsPanel.style.flex = '1';
+        nextStepsPanel.style.transition = 'flex 0.3s ease';
+    }
       document.addEventListener('click', function(e) {
         if(e.target && e.target.classList.contains('toggle-btn')) {
           var toggleBtns = document.querySelectorAll('.toggle-btn');
