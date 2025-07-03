@@ -417,6 +417,35 @@
       background: #999;
       cursor: not-allowed;
     }
+    /* Similar Loans Table */
+    .similar-loans-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .similar-loans-table th,
+    .similar-loans-table td {
+      padding: 12px 8px;
+      text-align: left;
+      border-bottom: 1px solid #e0e6ed;
+      font-size: 14px;
+    }
+    .similar-loans-table th {
+      background: #f5f6fa;
+      font-weight: 600;
+    }
+    .similar-loans-table td.risk-pt {
+      font-weight: 700;
+    }
+    .similar-loans-table td.outcome.success {
+      color: #2e7d32;  /* green */
+      font-weight: 600;
+    }
+    .similar-loans-table td.outcome.default {
+      color: #d32f2f;  /* red */
+      font-weight: 600;
+    }
+
   </style>
 
   <div class="login-screen" id="login-screen">
@@ -507,18 +536,46 @@
         </div>
       </div>
       <div class="secondary-row">
-        <!-- Historical Performance Chart -->
-        <div class="card" style="position:relative;">
-          <div class="risk-title">Historical Performance</div>
-          <div class="chart-toggle">
-            <button class="toggle-btn active">12 mo</button>
-            <button class="toggle-btn">24 mo</button>
-            <button class="toggle-btn">All time</button>
-          </div>
-          <div class="chart-area">
-            <canvas id="lineChart" width="600" height="160"></canvas>
-          </div>
+        <!-- Other Similar Loans Table -->
+        <div class="card">
+          <div class="risk-title">Other Similar Loans</div>
+          <table class="similar-loans-table">
+            <thead>
+              <tr>
+                <th>Loan ID</th>
+                <th>Top Risk Factors</th>
+                <th>Risk %</th>
+                <th>External Risk %</th>
+                <th>Loan Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10</td>
+                <td>DTI, High Interest Rate</td>
+                <td class="risk-pt">30%</td>
+                <td>28%</td>
+                <td class="outcome success">Success</td>
+              </tr>
+              <tr>
+                <td>11</td>
+                <td>Limited Reserves</td>
+                <td class="risk-pt">63%</td>
+                <td>65%</td>
+                <td class="outcome default">Default</td>
+              </tr>
+              <tr>
+                <td>12</td>
+                <td>Self-Employment</td>
+                <td class="risk-pt">99%</td>
+                <td>92%</td>
+                <td class="outcome success">Success</td>
+              </tr>
+              <!-- add more rows as needed -->
+            </tbody>
+          </table>
         </div>
+
         <!-- Next Steps Panel -->
         <div class="card" style="flex: 0.6;" id="next-steps-panel">
           <div class="next-title">Points to Consider</div>
@@ -684,10 +741,6 @@
           li.textContent = s;
           nl.appendChild(li);
         });
-
-        // Chart
-        const ctx = document.getElementById('lineChart').getContext('2d');
-        drawLineChart(ctx, currentProfile.chartData);
 
         // Show dashboard
         loadingState.style.display   = 'none';
