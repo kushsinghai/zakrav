@@ -583,20 +583,136 @@
       var unloadedState = document.getElementById('unloaded-state');
       var loadingState = document.getElementById('loading-state');
       var loanChange = document.getElementById('loan-change');
-      function showDashboard() {
-        loadingState.style.display = 'none';
+      // ─── 3-Loan lookup and dynamic rendering ───
+
+      // 1) Hard-coded loan profiles
+      const loanProfiles = {
+        '1111': {
+          percent: '30%', label: 'Low',
+          amount: '$100,000', ltv: '50%',
+          riskFactors: [
+            { name:'DTI', value:'20%', delta:'+2%' },
+            { name:'Self-Employment', value:'No', delta:'-1%' }
+          ],
+          chartData: [0.2,0.25,0.3,0.28,0.32,0.3],
+          nextSteps: [
+            'Send reminder for updated bank statements',
+            'Verify employment status',
+            'Check credit score report'
+          ]
+        },
+        '1234': {
+          percent: '63%', label: 'High',
+          amount: '$250,000', ltv: '80%',
+          riskFactors: [
+            { name:'DTI', value:'46.2%', delta:'+12%' },
+            { name:'Self-Employment', value:'Yes', delta:'+10%' },
+            { name:'Loan Term', value:'30 y', delta:'+8%' },
+            { name:'Limited Reserves', value:'56%', delta:'+7%' },
+            { name:'High Interest Rate', value:'', delta:'+5%' }
+          ],
+          chartData: [0.4,0.6,0.5,0.7,0.6,0.65],
+          nextSteps: [
+            'This originator has had 4 loans with similar scores',
+            'Consider requesting documentation of reserves',
+            'View detailed loan data'
+          ]
+        },
+        '4321': {
+          percent: '99%', label: 'Extreme Risk',
+          amount: '$500,000', ltv: '95%',
+          riskFactors: [
+            { name:'DTI', value:'90%', delta:'+30%' },
+            { name:'Self-Employment', value:'Yes', delta:'+25%' }
+          ],
+          chartData: [0.9,0.92,0.95,0.93,0.94,0.99],
+          nextSteps: [
+            'Flag for manual review',
+            'Request additional collateral',
+            'Schedule underwriting call'
+          ]
+        }
+      };
+
+      // 2) Track the profile currently in view
+      let currentProfile = null;
+
+      // 3) On Enter, pick profile and render
+      // NEW — call renderDashboard, not showDashboard
+      loanInput.addEventListener('keydown', e => {
+        if (e.key !== 'Enter' || !loanInput.value.trim()) return;
+        const id = loanInput.value.trim();
+        currentProfile = loanProfiles[id] || {
+          percent: '--', label: 'Unknown',
+          amount: '--', ltv: '--',
+          riskFactors: [], chartData: [], nextSteps: []
+        };
+        unloadedState.style.display = 'none';
+        loadingState.style.display  = '';
+        setTimeout(renderDashboard, 600);
+      });
+
+
+      // 4) Replace showDashboard() with renderDashboard()
+      function renderDashboard() {
+        // Gauge
+        document.querySelector('.gauge-value').textContent = currentProfile.percent;
+        document.querySelector('.gauge-badge').textContent = currentProfile.label;
+
+        // Mini-cards
+        const mini = document.querySelectorAll('.mini-card .value');
+        mini[0].textContent = currentProfile.amount;
+        mini[1].textContent = currentProfile.ltv;
+
+        // Risk factors
+        const rl = document.querySelector('.risk-list');
+        rl.innerHTML = '';
+        currentProfile.riskFactors.forEach(rf => {
+          const item = document.createElement('div');
+          item.className = 'risk-item';
+          item.innerHTML = `
+            <span>${rf.name}</span>
+            <span>${rf.value} <span class="risk-badge">${rf.delta}</span></span>`;
+          rl.appendChild(item);
+        });
+
+        // Next steps
+        const nl = document.querySelector('.next-list');
+        nl.innerHTML = '';
+        currentProfile.nextSteps.forEach(s => {
+          const li = document.createElement('li');
+          li.textContent = s;
+          nl.appendChild(li);
+        });
+
+        // Chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        drawLineChart(ctx, currentProfile.chartData);
+
+        // Show dashboard
+        loadingState.style.display   = 'none';
         dashboardContent.style.display = '';
         loanInput.disabled = true;
         loanChange.style.display = '';
-        renderChart();
       }
-      loanInput.addEventListener('keydown', function(e) {
-        if(e.key === 'Enter' && loanInput.value.trim()) {
-          unloadedState.style.display = 'none';
-          loadingState.style.display = '';
-          setTimeout(showDashboard, 1000); // 1 second loading
-        }
+
+      // 5) Wire up “Change” button to reset
+      loanChange.addEventListener('click', () => {
+        dashboardContent.style.display    = 'none';
+        unloadedState.style.display       = '';
+        loadingState.style.display        = 'none';
+        loanInput.disabled                = false;
+        loanInput.value                   = '';
+        loanChange.style.display          = 'none';
+        document.getElementById('chat-history').innerHTML = '';
+        renderEmptySelections(); // optional: clear radios
       });
+
+      // Optional helper to clear feedback radios
+      function renderEmptySelections() {
+        document.querySelectorAll('input[name="loan-accepted"]').forEach(i => i.checked = false);
+      }
+
       loanChange.addEventListener('click', function() {
         dashboardContent.style.display = 'none';
         unloadedState.style.display = '';
