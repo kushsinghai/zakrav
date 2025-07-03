@@ -646,7 +646,7 @@
       const loanProfiles = {
         '1111': {
           percent: '30%', label: 'Low',
-          amount: '$100,000', ltv: '16%',
+          amount: '$100,000', ltv: '+16%',
           riskFactors: [
             { name:'External Risks', value:'32%', delta:'+16%' },
             { name:'DTI', value:'20%', delta:'+2%' },
@@ -660,7 +660,7 @@
         },
         '1234': {
           percent: '63%', label: 'High',
-          amount: '$250,000', ltv: '13%',
+          amount: '$250,000', ltv: '+13%',
           riskFactors: [
             { name:'External Risks', value:'26%', delta:'+13%' },
             { name:'DTI', value:'46.2%', delta:'+12%' },
@@ -678,7 +678,7 @@
         },
         '4321': {
           percent: '90%', label: 'Extreme Risk',
-          amount: '$500,000', ltv: '9%',
+          amount: '$500,000', ltv: '+9%',
           riskFactors: [
             { name:'External Risks', value:'18%', delta:'+9%' },
             { name:'DTI', value:'90%', delta:'+30%' },
