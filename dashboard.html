@@ -509,8 +509,8 @@
               <div class="label">Loan Amount</div>
             </div>
             <div class="mini-card">
-              <div class="value">80%</div>
-              <div class="label">LTV</div>
+              <div class="value">+12%</div>
+              <div class="label">External Risk Factors</div>
             </div>
           </div>
         </div>
@@ -646,12 +646,12 @@
       const loanProfiles = {
         '1111': {
           percent: '30%', label: 'Low',
-          amount: '$100,000', ltv: '50%',
+          amount: '$100,000', ltv: '16%',
           riskFactors: [
+            { name:'External Risks', value:'32%', delta:'+16%' },
             { name:'DTI', value:'20%', delta:'+2%' },
             { name:'Self-Employment', value:'No', delta:'-1%' }
           ],
-          chartData: [0.2,0.25,0.3,0.28,0.32,0.3],
           nextSteps: [
             'Send reminder for updated bank statements',
             'Verify employment status',
@@ -660,8 +660,9 @@
         },
         '1234': {
           percent: '63%', label: 'High',
-          amount: '$250,000', ltv: '80%',
+          amount: '$250,000', ltv: '13%',
           riskFactors: [
+            { name:'External Risks', value:'26%', delta:'+13%' },
             { name:'DTI', value:'46.2%', delta:'+12%' },
             { name:'Self-Employment', value:'Yes', delta:'+10%' },
             { name:'Loan Term', value:'30 y', delta:'+8%' },
@@ -676,9 +677,10 @@
           ]
         },
         '4321': {
-          percent: '99%', label: 'Extreme Risk',
-          amount: '$500,000', ltv: '95%',
+          percent: '90%', label: 'Extreme Risk',
+          amount: '$500,000', ltv: '9%',
           riskFactors: [
+            { name:'External Risks', value:'18%', delta:'+9%' },
             { name:'DTI', value:'90%', delta:'+30%' },
             { name:'Self-Employment', value:'Yes', delta:'+25%' }
           ],
@@ -712,6 +714,8 @@
 
       // 4) Replace showDashboard() with renderDashboard()
       function renderDashboard() {
+        document.getElementById('feedback-panel').style.display      = '';
+        document.getElementById('next-steps-panel').style.flex       = '0.6';
         // Gauge
         document.querySelector('.gauge-value').textContent = currentProfile.percent;
         document.querySelector('.gauge-badge').textContent = currentProfile.label;
